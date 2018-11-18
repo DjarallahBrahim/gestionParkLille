@@ -1,4 +1,4 @@
-package com.example.samlille.gestiondepark
+package com.example.samlille.gestiondepark.DataBase
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room

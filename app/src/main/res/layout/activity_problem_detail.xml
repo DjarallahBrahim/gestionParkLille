@@ -41,26 +41,6 @@
                 app:met_floatingLabel="normal" />
 
             <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-                android:id="@+id/adresse_field_boxes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                app:endIcon="@drawable/ic_mic_black_24dp"
-                app:hasClearButton="true"
-                android:textSize="15sp"
-                app:labelText="adresse"
-
-                app:panelBackgroundColor="#fff">
-
-                <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-                    android:id="@+id/adresse_edit_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/A400red" />
-
-            </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
-
-            <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
                 android:id="@+id/description_field_boxes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,9 +56,31 @@
                     android:id="@+id/description_edit_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/A400red" />
+                    android:textColor="#000" />
 
             </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+            <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+                android:id="@+id/adresse_field_boxes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:textSize="15sp"
+                app:endIcon="@drawable/places_ic_search"
+                app:hasClearButton="true"
+                app:labelText="adresse"
+
+
+                app:panelBackgroundColor="#fff">
+
+                <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                    android:id="@+id/adresse_edit_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000" />
+
+            </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
 
             <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
                 android:id="@+id/location_field_boxes"
@@ -95,7 +97,7 @@
                     android:id="@+id/location_edit_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/A400red" />
+                    android:textColor="#000" />
 
             </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 

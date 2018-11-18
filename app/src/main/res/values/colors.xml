@@ -3,4 +3,6 @@
     <color name="colorPrimary">#BC006F</color>
     <color name="colorPrimaryDark">#9b035c</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="leku_app_blue">#3DA8E1</color>
+    <color name="leku_app_strong_blue">#053B58</color>
 </resources>

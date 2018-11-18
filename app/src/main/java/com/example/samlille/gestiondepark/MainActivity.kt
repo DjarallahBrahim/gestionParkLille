@@ -7,6 +7,8 @@ import android.os.Handler
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.example.samlille.gestiondepark.DataBase.DbWorkerThread
+import com.example.samlille.gestiondepark.DataBase.ProblemDataBase
 
 class MainActivity : AppCompatActivity() {
     private var mDb: ProblemDataBase? = null
