@@ -2,6 +2,8 @@ package com.example.samlille.gestiondepark.Services;
 
 
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -22,6 +24,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 public class MapService implements OnMapReadyCallback, MapServiceInter {
     private static final String TAG = map2Activity.class.getSimpleName();
     private GoogleMap mMap;
@@ -37,24 +43,24 @@ public class MapService implements OnMapReadyCallback, MapServiceInter {
 
 
     private Location mLastKnownLocation;
+    private LatLng problemLocation = new LatLng(0, 0);
 
     private AppCompatActivity context;
 
 
-
-     public MapService(AppCompatActivity context) {
+    public MapService(AppCompatActivity context) {
         this.context = context;
     }
 
     @Override
-    public void initMap(){
-       SupportMapFragment mapFragment = (SupportMapFragment) this.context.getSupportFragmentManager()
-               .findFragmentById(R.id.map);
-       mapFragment.getMapAsync(this);
-       mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+    public void initMap() {
+        SupportMapFragment mapFragment = (SupportMapFragment) this.context.getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
         this.servicePlaceAutocomplet = new ServicePlaceAutocomplet();
 
-   }
+    }
 
 
     @Override
@@ -73,6 +79,7 @@ public class MapService implements OnMapReadyCallback, MapServiceInter {
                 mMap.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title("Problem Location"));
+                problemLocation = latLng;
             }
         });
 
@@ -82,7 +89,7 @@ public class MapService implements OnMapReadyCallback, MapServiceInter {
 
 
     @Override
-     public void getLocationPermission() {
+    public void getLocationPermission() {
         if (ContextCompat.checkSelfPermission(this.context.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -97,7 +104,7 @@ public class MapService implements OnMapReadyCallback, MapServiceInter {
     @Override
     public void OnrequestPermission(int requestCode,
                                     @NonNull String permissions[],
-                                    @NonNull int[] grantResults){
+                                    @NonNull int[] grantResults) {
         mLocationPermissionGranted = false;
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
@@ -125,7 +132,7 @@ public class MapService implements OnMapReadyCallback, MapServiceInter {
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
                 mLastKnownLocation = null;
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
@@ -143,6 +150,8 @@ public class MapService implements OnMapReadyCallback, MapServiceInter {
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(mLastKnownLocation.getLatitude(),
                                             mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            problemLocation = new LatLng(mLastKnownLocation.getLatitude(),
+                                    mLastKnownLocation.getLongitude());
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
@@ -152,8 +161,26 @@ public class MapService implements OnMapReadyCallback, MapServiceInter {
                     }
                 });
             }
-        } catch(SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
+    }
+
+    @Override
+    public String getLocationProblem() throws IOException {
+
+        if (null != problemLocation) {
+
+            return problemLocation.latitude + ", " + problemLocation.longitude;
+        }
+
+        return "";
+
+    }
+
+    @Override
+    public void cleanMap() {
+        if (null != this.mMap)
+            this.mMap.clear();
     }
 }

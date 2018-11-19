@@ -63,5 +63,7 @@ dependencies {
 
     implementation "com.google.maps:google-maps-services:0.2.9"
 
+    implementation "com.android.support:recyclerview-v7:26.1.0"
+
 
 }

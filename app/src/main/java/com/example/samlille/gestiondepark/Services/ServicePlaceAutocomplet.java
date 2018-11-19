@@ -22,6 +22,7 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ServicePlaceAutocomplet implements  GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, PlaceSelectionListener {
@@ -35,11 +36,11 @@ public class ServicePlaceAutocomplet implements  GoogleApiClient.ConnectionCallb
 
 
 
+
+
     public void callPlaceSearchFragment(Activity context){
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 context.getFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-
-
         autocompleteFragment.setOnPlaceSelectedListener(this);
 
     }
@@ -111,4 +112,5 @@ public class ServicePlaceAutocomplet implements  GoogleApiClient.ConnectionCallb
     public void setmMap(GoogleMap mMap) {
         this.mMap = mMap;
     }
+
 }

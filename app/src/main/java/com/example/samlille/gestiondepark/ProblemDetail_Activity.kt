@@ -30,12 +30,14 @@ class ProblemDetail_Activity : AppCompatActivity() {
     private lateinit var mLocation: ExtendedEditText
     private lateinit var mAdresse : ExtendedEditText
     private lateinit var findAdressField : TextFieldBoxes
+    private lateinit var findLocationField : TextFieldBoxes
     private lateinit var sauvegarder: Button
     private lateinit var spinner: MaterialBetterSpinner
     private var SPINNERLIST = arrayOf("Android Material Design", "Material Design Spinner", "Spinner Using Material Library", "Material Spinner Example")
 
-    private var adresseAutoComplet: PlaceAutocompleteFragment? = null
     private val PLACE_AUTOCOMPLETE_REQUEST_CODE = 1
+    val AdressRequest = 2
+
     private val servicePlaceAutocomplet = ServicePlaceAutocomplet()
 
     private var serviceProblemDetail = ServiceProblemDetailImp()
@@ -48,18 +50,21 @@ class ProblemDetail_Activity : AppCompatActivity() {
         initAttributeINPUT()
         initSpinner()
 
-        //adresseAutoComplet = fragmentManager.findFragmentById(R.id.place_autocomplete_fragment) as PlaceAutocompleteFragment
-       // adresseAutoComplet!!.setHint("Recherche une adresse ? ")
         servicePlaceAutocomplet.place( this)
 
         sauvegarder.setOnClickListener{
-           // getInfoAndSaveIt()
-            val intent = Intent(this, map2Activity::class.java)
+            getInfoAndSaveIt()
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
-        findAdressField.setOnClickListener{
+        findAdressField.getEndIconImageButton().setOnClickListener{
             servicePlaceAutocomplet.callPlaceSearchIntent(this)
+        }
+
+        findLocationField.getEndIconImageButton().setOnClickListener{
+            startActivity(Intent(this, map2Activity::class.java))
         }
 
 
@@ -73,7 +78,7 @@ class ProblemDetail_Activity : AppCompatActivity() {
 
         if (!serviceProblemDetail.checkInput(mType, description,
                         location, adresse)) {
-            //showDialogError()
+            showDialogError()
 
 
         } else {
@@ -94,6 +99,7 @@ class ProblemDetail_Activity : AppCompatActivity() {
         sauvegarder = findViewById(R.id.SauvegarderBTN)
 
         findAdressField = findViewById(R.id.adresse_field_boxes)
+        findLocationField = findViewById(R.id.location_field_boxes)
 
     }
 
@@ -136,10 +142,8 @@ class ProblemDetail_Activity : AppCompatActivity() {
 
 
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
-        //autocompleteFragment.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 val place = PlaceAutocomplete.getPlace(this, data)
@@ -151,9 +155,15 @@ class ProblemDetail_Activity : AppCompatActivity() {
                 val status = PlaceAutocomplete.getStatus(this, data)
                 Toast.makeText(applicationContext,status.toString(),Toast.LENGTH_SHORT).show()
 
-            } else if (requestCode == RESULT_CANCELED) {
+            } else if (resultCode == RESULT_CANCELED) {
 
             }
+        }else if(resultCode == AdressRequest){
+            intent = getIntent() as Intent
+            var problemlocation = intent.getStringExtra("problemLocation") as String
+            this.mLocation.setText(problemlocation)
+            Toast.makeText(applicationContext,problemlocation,Toast.LENGTH_SHORT).show()
+
         }
     }
     
@@ -172,6 +182,13 @@ class ProblemDetail_Activity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         serviceProblemDetail.openDataBase(this)
+
+        intent = getIntent() as Intent
+        val problemlocation = intent.getStringExtra("problemLocation")
+        if(null != problemlocation) {
+            this.mLocation.setText(problemlocation)
+            Toast.makeText(applicationContext, problemlocation, Toast.LENGTH_SHORT).show()
+        }
     }
 
 }
