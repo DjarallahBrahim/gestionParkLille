@@ -3,6 +3,9 @@ package com.example.samlille.gestiondepark.DataBase
 import android.os.Handler
 import android.os.HandlerThread
 
+/**
+ * DbWorkerThread: we execute our Database request in threads
+ */
 class DbWorkerThread(threadName: String) : HandlerThread(threadName) {
 
     private lateinit var mWorkerHandler: Handler

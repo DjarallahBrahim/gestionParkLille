@@ -3,13 +3,23 @@ package com.example.samlille.gestiondepark
 
 import android.content.Context
 import android.content.Intent
-import android.support.v4.content.ContextCompat.startActivity
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.*
+import android.widget.Toast
 import com.example.samlille.gestiondepark.DataBase.Problem_Entity
+import com.example.samlille.gestiondepark.Services.CusomDataBaseService
 import kotlinx.android.synthetic.main.problem_item.view.*
+import android.app.Activity
 
-class Problem_adapter(val items : ArrayList<Problem_Entity>, val context: Context) : RecyclerView.Adapter<ViewHolder>() {
+
+/**
+ * Problem_adapter for our recycleView
+ */
+class Problem_adapter(val items : ArrayList<Problem_Entity>, val context: Context, cusomDataBaseService: CusomDataBaseService) : RecyclerView.Adapter<ViewHolder>() {
+
+    private  var cusomDataBaseService = cusomDataBaseService
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.problem_item, parent, false))
     }
@@ -20,7 +30,16 @@ class Problem_adapter(val items : ArrayList<Problem_Entity>, val context: Contex
         holder?.problemLocation?.text = items.get(position).location
 
         holder.itemView.setOnClickListener({
-            holder.itemView.context.startActivity(Intent(holder.itemView.context, map2Activity::class.java))
+            holder.itemView.context.startActivity(Intent(holder.itemView.context, problemAfficher::class.java)
+                    .putExtra("ShowProblem",items.get(position).location)
+                    .putExtra("id",items.get(position).uid)
+                    .putExtra("problemType", items.get(position).type))
+            (context as Activity).finish()
+
+        })
+
+        holder.itemView.setOnLongClickListener({
+            showDialogError(holder.itemView.context, items.get(position).uid)
 
         })
     }
@@ -29,6 +48,25 @@ class Problem_adapter(val items : ArrayList<Problem_Entity>, val context: Contex
     // Gets the number of animals in the list
     override fun getItemCount(): Int {
         return items.size
+    }
+
+    fun showDialogError(context: Context, uid: Long?): Boolean {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Delete Problem")
+        builder.setMessage("Do you want to delete this problem ?")
+        builder.setPositiveButton("Yes"){dialog, which ->
+            Toast.makeText(context,"Problem Deleted", Toast.LENGTH_SHORT).show()
+            this.cusomDataBaseService.deletById(uid)
+            (context as Activity).finish()
+            context.startActivity(context.getIntent())
+
+        }
+        builder.setNegativeButton("No"){dialog, which ->
+            Toast.makeText(context,"Problem not deleted", Toast.LENGTH_SHORT).show()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+        return true
     }
 
 }

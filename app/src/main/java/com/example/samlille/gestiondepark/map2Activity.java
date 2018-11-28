@@ -6,23 +6,53 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.example.samlille.gestiondepark.Services.MapService;
 
 import java.io.IOException;
 
-
+/**
+ * our map to show/add problems locations
+ */
 public class map2Activity extends AppCompatActivity {
     private MapService mMapService;
-    public static final int AdressRequest = 2;
+    private static final int AdressRequest = 2;
+    private boolean showinPloblem = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_map2);
 
-        this.mMapService = new MapService(this);
-        this.mMapService.initMap();
+        try{
+            if(null != getIntent().getStringExtra("ShowProblem") &&
+                    !getIntent().getStringExtra("ShowProblem").isEmpty()){
+                this.showinPloblem = true;
+                LinearLayout mainLayout=(LinearLayout)this.findViewById(R.id.validationLayour);
+                mainLayout.setVisibility(LinearLayout.GONE);
+
+                this.mMapService = new MapService(this);
+                this.mMapService.initMap(getIntent().getStringExtra("ShowProblem"),"");
+            }else if(null != getIntent().getStringExtra("ShowProblems")){
+                this.showinPloblem = true;
+                LinearLayout mainLayout=(LinearLayout)this.findViewById(R.id.validationLayour);
+                mainLayout.setVisibility(LinearLayout.GONE);
+
+                this.mMapService = new MapService(this);
+                this.mMapService.initMap("","ShowProblems");
+            }else{
+                this.mMapService = new MapService(this);
+                this.mMapService.initMap(getIntent().getStringExtra(""),"");
+            }
+        }catch (Exception e){
+
+        }
+
+
+
+
 
     }
 
@@ -47,4 +77,10 @@ public class map2Activity extends AppCompatActivity {
     public void supppLocation(View view) {
         this.mMapService.cleanMap();
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
 }

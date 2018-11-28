@@ -2,8 +2,6 @@ package com.example.samlille.gestiondepark.Services;
 
 
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -26,48 +24,69 @@ import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 public class MapService implements OnMapReadyCallback, MapServiceInter {
+
+
     private static final String TAG = map2Activity.class.getSimpleName();
     private GoogleMap mMap;
-
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
     private boolean mLocationPermissionGranted;
-    private ServicePlaceAutocomplet servicePlaceAutocomplet;
-
-
     private static final int DEFAULT_ZOOM = 15;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-
-
     private Location mLastKnownLocation;
     private LatLng problemLocation = new LatLng(0, 0);
-
     private AppCompatActivity context;
+    String showproblem = "";
+    String showproblems = "";
+    boolean drowMarker;
+
+    private CusomDataBaseService cusomDataBaseService;
 
 
+    /**
+     * consterctor
+     *
+     * @param context
+     */
     public MapService(AppCompatActivity context) {
         this.context = context;
+        this.cusomDataBaseService = new CusomDataBaseService();
     }
 
+    /**
+     * init the map with the nessacery informations
+     *
+     * @param showProblem
+     * @param showproblems
+     */
     @Override
-    public void initMap() {
+    public void initMap(String showProblem, String showproblems) {
         SupportMapFragment mapFragment = (SupportMapFragment) this.context.getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
-        this.servicePlaceAutocomplet = new ServicePlaceAutocomplet();
+        this.showproblem = showProblem;
+        this.showproblems = showproblems;
+
+        if ((null != this.showproblem && !this.showproblem.isEmpty()) ||
+                (null != this.showproblems && !this.showproblems.isEmpty())) {
+            this.drowMarker = false;
+        }
 
     }
 
 
+    /**
+     * onMapReady
+     *
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         getLocationPermission();
         mMap = googleMap;
-
 
         updateLocationUI();
         getDeviceLocation();
@@ -83,11 +102,49 @@ public class MapService implements OnMapReadyCallback, MapServiceInter {
             }
         });
 
-        this.servicePlaceAutocomplet.setmMap(mMap);
-        this.servicePlaceAutocomplet.callPlaceSearchFragment(this.context);
+        if (null != this.showproblem && !this.showproblem.isEmpty()) {
+            mMap.clear();
+            showproblem.replaceAll("\\s", "");
+            String[] location = showproblem.split(",");
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(Double.parseDouble(location[0]), Double.parseDouble(location[1])))
+                    .title("Problem Location"));
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(Double.parseDouble(location[0]), Double.parseDouble(location[1])), DEFAULT_ZOOM));
+
+            mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                @Override
+                public void onMapLongClick(LatLng latLng) {
+
+                }
+            });
+        } else if (null != this.showproblems && !this.showproblems.isEmpty()) {
+            this.cusomDataBaseService.initDB(this.context);
+            this.cusomDataBaseService.fetchLocationFromDB(this.context, (locationsMap) -> {
+                for (String location : locationsMap) {
+                    location.replaceAll("\\s", "");
+                    String[] locatio = location.split(",");
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(Double.parseDouble(locatio[0]), Double.parseDouble(locatio[1])))
+                            .title("Problem Location"));
+                }
+                mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                    @Override
+                    public void onMapLongClick(LatLng latLng) {
+                    }
+                });
+                return null;
+            });
+        }
+
+
     }
 
 
+    /**
+     * getLocation
+     */
     @Override
     public void getLocationPermission() {
         if (ContextCompat.checkSelfPermission(this.context.getApplicationContext(),
@@ -101,6 +158,13 @@ public class MapService implements OnMapReadyCallback, MapServiceInter {
         }
     }
 
+    /**
+     * requestPermission
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void OnrequestPermission(int requestCode,
                                     @NonNull String permissions[],
@@ -117,6 +181,9 @@ public class MapService implements OnMapReadyCallback, MapServiceInter {
         updateLocationUI();
     }
 
+    /**
+     * updateLocationUI
+     */
     @Override
     public void updateLocationUI() {
         if (mMap == null) {
@@ -137,6 +204,10 @@ public class MapService implements OnMapReadyCallback, MapServiceInter {
         }
     }
 
+    /**
+     * getDeviceLocation
+     */
+
     @Override
     public void getDeviceLocation() {
         try {
@@ -147,9 +218,10 @@ public class MapService implements OnMapReadyCallback, MapServiceInter {
                     public void onComplete(@NonNull Task task) {
                         if (task.isSuccessful()) {
                             mLastKnownLocation = (Location) task.getResult();
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            if (null == showproblem)
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                        new LatLng(mLastKnownLocation.getLatitude(),
+                                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                             problemLocation = new LatLng(mLastKnownLocation.getLatitude(),
                                     mLastKnownLocation.getLongitude());
                         } else {
@@ -166,6 +238,12 @@ public class MapService implements OnMapReadyCallback, MapServiceInter {
         }
     }
 
+    /**
+     * getLocationProblem
+     *
+     * @return
+     * @throws IOException
+     */
     @Override
     public String getLocationProblem() throws IOException {
 
@@ -182,5 +260,23 @@ public class MapService implements OnMapReadyCallback, MapServiceInter {
     public void cleanMap() {
         if (null != this.mMap)
             this.mMap.clear();
+    }
+
+    @Override
+    public void killDataBaseInstance() {
+        if(null != this.cusomDataBaseService)
+            this.cusomDataBaseService.destroyDataBase();
+    }
+
+    @Override
+    public void showProblem(List<String> locations) {
+        for (String location : locations) {
+            mMap.clear();
+            location.replaceAll("\\s", "");
+            String[] locatio = location.split(",");
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(Double.parseDouble(locatio[0]), Double.parseDouble(locatio[1])))
+                    .title("Problem Location"));
+        }
     }
 }

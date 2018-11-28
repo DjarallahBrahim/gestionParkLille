@@ -33,18 +33,6 @@ public class ServicePlaceAutocomplet implements  GoogleApiClient.ConnectionCallb
     private GoogleMap mMap;
     private static final int DEFAULT_ZOOM = 15;
 
-
-
-
-
-
-    public void callPlaceSearchFragment(Activity context){
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                context.getFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-        autocompleteFragment.setOnPlaceSelectedListener(this);
-
-    }
-
     public void callPlaceSearchIntent(Activity context) {
         try {
             Intent intent =

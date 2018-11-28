@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -57,16 +58,99 @@
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content" />-->
     <!--</LinearLayout>-->
-    <android.support.v7.widget.RecyclerView
-
-        android:id="@+id/problem_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/add"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add problem" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+
+                android:id="@+id/problem_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/add"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_gravity="right"-->
+        <!--android:layout_margin="10dp"-->
+        <!--android:clickable="true"-->
+        <!--android:visibility="visible"-->
+        <!--app:srcCompat="@android:drawable/ic_input_add" />-->
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/right_labels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"
+        fab:fab_addButtonColorNormal="@color/colorPrimary"
+        fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
+        fab:fab_addButtonPlusIconColor="#ede"
+        fab:fab_addButtonSize="mini"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        fab:fab_labelsPosition="left"
+        fab:fab_size="normal"
+        fab:fab_title="sam">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:src="@android:drawable/ic_input_add"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="@color/colorPrimaryDark"
+            fab:fab_size="normal"
+            fab:fab_title="Add" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/showProblems"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:src="@android:drawable/ic_dialog_map"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="@color/colorPrimaryDark"
+            fab:fab_size="normal"
+            fab:fab_title="Show All problems" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/testMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:src="@android:drawable/ic_menu_edit"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="@color/colorPrimaryDark"
+            fab:fab_size="normal"
+            fab:fab_title="Test Mode" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/suppDB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:src="@android:drawable/ic_menu_delete"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="@color/colorPrimaryDark"
+            fab:fab_size="normal"
+            fab:fab_title="Delet All problem" />
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+</RelativeLayout>

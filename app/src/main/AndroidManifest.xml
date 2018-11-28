@@ -38,7 +38,8 @@
             android:label="@string/title_activity_problem_detail_"
             android:theme="@style/AppTheme" />
         <activity android:name=".MapActivity" />
-        <activity android:name=".map2Activity"></activity>
+        <activity android:name=".map2Activity" />
+        <activity android:name=".problemAfficher"></activity>
     </application>
 
 </manifest>

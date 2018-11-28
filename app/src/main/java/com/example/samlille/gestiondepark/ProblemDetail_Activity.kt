@@ -20,7 +20,6 @@ import com.example.samlille.gestiondepark.DataBase.Problem_Entity
 import com.example.samlille.gestiondepark.Services.ServicePlaceAutocomplet
 import com.example.samlille.gestiondepark.Services.ServiceProblemDetailImp
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment
 import studio.carbonylgroup.textfieldboxes.TextFieldBoxes
 
 class ProblemDetail_Activity : AppCompatActivity() {
@@ -33,7 +32,7 @@ class ProblemDetail_Activity : AppCompatActivity() {
     private lateinit var findLocationField : TextFieldBoxes
     private lateinit var sauvegarder: Button
     private lateinit var spinner: MaterialBetterSpinner
-    private var SPINNERLIST = arrayOf("Android Material Design", "Material Design Spinner", "Spinner Using Material Library", "Material Spinner Example")
+    private var SPINNERLIST = arrayOf("Arbre à tailler", "Arbre à abattre", "Détritus", "Haie à tailler", "Mauvaise herbe", "Autre")
 
     private val PLACE_AUTOCOMPLETE_REQUEST_CODE = 1
     val AdressRequest = 2
@@ -54,9 +53,7 @@ class ProblemDetail_Activity : AppCompatActivity() {
 
         sauvegarder.setOnClickListener{
             getInfoAndSaveIt()
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+
         }
 
         findAdressField.getEndIconImageButton().setOnClickListener{
@@ -76,8 +73,8 @@ class ProblemDetail_Activity : AppCompatActivity() {
         val adresse = mAdresse.text.toString()
 
 
-        if (!serviceProblemDetail.checkInput(mType, description,
-                        location, adresse)) {
+        if (!serviceProblemDetail.checkInput(mType,
+                        location)) {
             showDialogError()
 
 
@@ -89,6 +86,9 @@ class ProblemDetail_Activity : AppCompatActivity() {
             problemEntity.adresse = location
             serviceProblemDetail.insertProblemDataInDb(problemEntity)
             Toast.makeText(this, "Le problème est sauvegardé ", Toast.LENGTH_LONG).show()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 
