@@ -31,6 +31,7 @@ class ProblemDetail_Activity : AppCompatActivity() {
     private lateinit var findAdressField : TextFieldBoxes
     private lateinit var findLocationField : TextFieldBoxes
     private lateinit var sauvegarder: Button
+    private lateinit var annuler: Button
     private lateinit var spinner: MaterialBetterSpinner
     private var SPINNERLIST = arrayOf("Arbre à tailler", "Arbre à abattre", "Détritus", "Haie à tailler", "Mauvaise herbe", "Autre")
 
@@ -45,15 +46,22 @@ class ProblemDetail_Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_problem_detail)
 
+
         //init Input
         initAttributeINPUT()
         initSpinner()
+
+        if (savedInstanceState != null) {
+            this.spinner.setSelection(SPINNERLIST.indexOf(savedInstanceState.getString("type")));
+        }
 
         servicePlaceAutocomplet.place( this)
 
         sauvegarder.setOnClickListener{
             getInfoAndSaveIt()
-
+        }
+        annuler.setOnClickListener{
+            finish()
         }
 
         findAdressField.getEndIconImageButton().setOnClickListener{
@@ -97,6 +105,7 @@ class ProblemDetail_Activity : AppCompatActivity() {
         mLocation = findViewById(R.id.location_edit_text)
         mAdresse = findViewById(R.id.adresse_edit_text)
         sauvegarder = findViewById(R.id.SauvegarderBTN)
+        annuler = findViewById(R.id.annulerBTN)
 
         findAdressField = findViewById(R.id.adresse_field_boxes)
         findLocationField = findViewById(R.id.location_field_boxes)
@@ -120,10 +129,10 @@ class ProblemDetail_Activity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this@ProblemDetail_Activity)
 
         // Set the alert dialog title
-        builder.setTitle("Erreur avec vos informatios !")
+        builder.setTitle("Il reste quelque champ à remplir")
 
         // Display a message on alert dialog
-        builder.setMessage("Remplir tous les champs SVP !")
+        builder.setMessage("Veuillez vous  remplir tous les champs (*)")
 
         // Set a positive button and its click listener on alert dialog
         builder.setPositiveButton("OK"){dialog, which ->
@@ -189,6 +198,21 @@ class ProblemDetail_Activity : AppCompatActivity() {
             this.mLocation.setText(problemlocation)
             Toast.makeText(applicationContext, problemlocation, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+
+    public override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState.putString("type",mType);
+        savedInstanceState.putString("description",mDescription.text.toString());
+        savedInstanceState.putString("adresse",mAdresse.text.toString());
+        super.onSaveInstanceState(savedInstanceState)
+
     }
 
 }

@@ -5,6 +5,7 @@ import com.google.maps.model.LatLng
 import java.util.*
 import kotlin.collections.ArrayList
 import android.content.Context
+import android.os.Handler
 import com.example.samlille.gestiondepark.DataBase.Problem_Entity
 import com.example.samlille.gestiondepark.Services.CusomDataBaseService
 
@@ -17,7 +18,11 @@ fun getLocation(x0: Double, y0: Double, radius: Int, context: Context) {
 
     var cusomDataBaseService = CusomDataBaseService()
     cusomDataBaseService.initDB(context)
-    cusomDataBaseService.deletAllFromDB()
+//    val handler = Handler()
+//    handler.postDelayed({
+//        cusomDataBaseService.deletAllFromDB()
+//    }, 1000)
+
 
 
     var point = LatLng(x0,y0)

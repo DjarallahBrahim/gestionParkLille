@@ -25,7 +25,7 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Detail du problème"
+                android:text="Détail du problème"
                 android:textColor="@android:color/black"
                 android:textSize="25sp"
                 android:textStyle="normal" />
@@ -87,10 +87,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
+                android:textSize="10sp"
                 app:endIcon="@android:drawable/ic_dialog_map"
                 app:hasClearButton="true"
-                app:labelText="Location"
-                android:textSize="10sp"
+                app:labelText="localisation (*)"
                 app:panelBackgroundColor="#fff">
 
                 <studio.carbonylgroup.textfieldboxes.ExtendedEditText

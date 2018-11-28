@@ -3,12 +3,14 @@ package com.example.samlille.gestiondepark
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import com.getbase.floatingactionbutton.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 
 import com.example.samlille.gestiondepark.DataBase.Problem_Entity
 import com.example.samlille.gestiondepark.FakeDataBAse.getLocation
 import com.example.samlille.gestiondepark.Services.CusomDataBaseService
+
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -32,7 +34,11 @@ class MainActivity : AppCompatActivity() {
         initAttributeINPUT()
         //init service/FB
         this.cusomDataBaseService.initDB(this)
-        this.cusomDataBaseService.fetchProblemDataFromDb(this, ::bindDataWithUI)
+        val handler = Handler()
+        handler.postDelayed({
+            this.cusomDataBaseService.fetchProblemDataFromDb(this, ::bindDataWithUI)
+        }, 1000)
+
 
         add.setOnClickListener{
             val intent = Intent(this, ProblemDetail_Activity::class.java)
@@ -41,9 +47,13 @@ class MainActivity : AppCompatActivity() {
         }
         testMode.setOnClickListener{
             this.cusomDataBaseService.destroyDataBase()
-            getLocation(50.626015, 3.049899,500,this)
-            finish()
-            startActivity(getIntent())
+            val handler = Handler()
+            handler.postDelayed({
+                getLocation(50.626015, 3.049899,500,this)
+                finish()
+                startActivity(getIntent())
+            }, 1500)
+
         }
         showProblems.setOnClickListener{
             val intent = Intent(this, map2Activity::class.java).putExtra("ShowProblems","ShowProblems")
@@ -51,8 +61,12 @@ class MainActivity : AppCompatActivity() {
         }
         deletDB.setOnClickListener{
             this.cusomDataBaseService.deletAllFromDB()
-            finish()
-            startActivity(getIntent())
+            val handler = Handler()
+            handler.postDelayed({
+                finish()
+                startActivity(getIntent())
+            }, 1500)
+
         }
     }
 
@@ -77,6 +91,17 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         this.cusomDataBaseService.destroyDataBase()
         super.onPause()
+    }
+
+    override fun onBackPressed() {
+
+        val intent = Intent(Intent.ACTION_MAIN)
+        intent.addCategory(Intent.CATEGORY_HOME)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        startActivity(intent)
+        finish()
     }
 
 }

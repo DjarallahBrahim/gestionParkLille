@@ -87,7 +87,7 @@ public class ServicePlaceAutocomplet implements  GoogleApiClient.ConnectionCallb
             this.mMap.clear();
             this.mMap.addMarker(new MarkerOptions().
                     position(place.getLatLng()
-                    ).title("Problème location"));
+                    ).title("Position du problème"));
             this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(),DEFAULT_ZOOM));
         }
     }

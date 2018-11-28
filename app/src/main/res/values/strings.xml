@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">gestion de park</string>
     <string name="title_activity_problem_detail_">ProblemDetail_Activity</string>
-    <string name="problemType">Le type</string>
+    <string name="problemType">Le type (*)</string>
     <string name="mapKey">AIzaSyCD_JVpotZuvTO3YxftbB3_4OVw7J50SnM</string>
     <string name="ajouterProbelm">Sauvegarder</string>
 

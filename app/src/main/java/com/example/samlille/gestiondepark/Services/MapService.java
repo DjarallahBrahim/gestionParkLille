@@ -3,6 +3,7 @@ package com.example.samlille.gestiondepark.Services;
 
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -121,21 +122,28 @@ public class MapService implements OnMapReadyCallback, MapServiceInter {
             });
         } else if (null != this.showproblems && !this.showproblems.isEmpty()) {
             this.cusomDataBaseService.initDB(this.context);
-            this.cusomDataBaseService.fetchLocationFromDB(this.context, (locationsMap) -> {
-                for (String location : locationsMap) {
-                    location.replaceAll("\\s", "");
-                    String[] locatio = location.split(",");
-                    mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(Double.parseDouble(locatio[0]), Double.parseDouble(locatio[1])))
-                            .title("Problem Location"));
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    cusomDataBaseService.fetchLocationFromDB(context, (locationsMap) -> {
+                        for (String location : locationsMap) {
+                            location.replaceAll("\\s", "");
+                            String[] locatio = location.split(",");
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(Double.parseDouble(locatio[0]), Double.parseDouble(locatio[1])))
+                                    .title("Problem Location"));
+                        }
+                        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                            @Override
+                            public void onMapLongClick(LatLng latLng) {
+                            }
+                        });
+                        return null;
+                    });
                 }
-                mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-                    @Override
-                    public void onMapLongClick(LatLng latLng) {
-                    }
-                });
-                return null;
-            });
+            }, 2000);
+
         }
 
 
@@ -218,10 +226,11 @@ public class MapService implements OnMapReadyCallback, MapServiceInter {
                     public void onComplete(@NonNull Task task) {
                         if (task.isSuccessful()) {
                             mLastKnownLocation = (Location) task.getResult();
-                            if (null == showproblem)
+                            if (null == showproblem && null != mLastKnownLocation)
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(mLastKnownLocation.getLatitude(),
                                                 mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            if (null != mLastKnownLocation)
                             problemLocation = new LatLng(mLastKnownLocation.getLatitude(),
                                     mLastKnownLocation.getLongitude());
                         } else {

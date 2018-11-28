@@ -8,56 +8,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
 
-        <!--<TextView-->
-            <!--android:id="@+id/textview1"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:text="Title:   " />-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/titleProblem"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content" />-->
-    <!--</LinearLayout>-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/textview2"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:text="Location:   " />-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/locationProblem"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content" />-->
-    <!--</LinearLayout>-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/textview3"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:text="Description   " />-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/descriptionProblem"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content" />-->
-    <!--</LinearLayout>-->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -116,7 +67,7 @@
             fab:fab_colorNormal="@color/colorPrimary"
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_size="normal"
-            fab:fab_title="Add" />
+            fab:fab_title="Ajouter" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/showProblems"
@@ -127,7 +78,7 @@
             fab:fab_colorNormal="@color/colorPrimary"
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_size="normal"
-            fab:fab_title="Show All problems" />
+            fab:fab_title="Visualiser tous les problèmes" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/testMode"
@@ -138,7 +89,7 @@
             fab:fab_colorNormal="@color/colorPrimary"
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_size="normal"
-            fab:fab_title="Test Mode" />
+            fab:fab_title="Mode de test" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/suppDB"
@@ -149,7 +100,7 @@
             fab:fab_colorNormal="@color/colorPrimary"
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_size="normal"
-            fab:fab_title="Delet All problem" />
+            fab:fab_title="Supprimer tous les problème" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

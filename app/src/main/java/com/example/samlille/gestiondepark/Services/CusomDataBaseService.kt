@@ -22,6 +22,7 @@ class CusomDataBaseService : CusomDataBaseServiceItf {
      */
     override fun initDB(context: Context) {
 
+
         //Lancer le WorkerHandler
         mDbWorkerThread = DbWorkerThread("dbWorkerMainThread")
         mDbWorkerThread.start()
@@ -52,8 +53,10 @@ class CusomDataBaseService : CusomDataBaseServiceItf {
      * destroy our database instance
      */
     override fun destroyDataBase() {
-        ProblemDataBase.destroyInstance()
-        mDbWorkerThread.quit()
+        if(mDbWorkerThread.isAlive) {
+            ProblemDataBase.destroyInstance()
+            mDbWorkerThread.quit()
+        }
     }
 
     /**

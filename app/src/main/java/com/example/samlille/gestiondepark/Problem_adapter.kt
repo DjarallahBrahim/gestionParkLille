@@ -52,16 +52,16 @@ class Problem_adapter(val items : ArrayList<Problem_Entity>, val context: Contex
 
     fun showDialogError(context: Context, uid: Long?): Boolean {
         val builder = AlertDialog.Builder(context)
-        builder.setTitle("Delete Problem")
-        builder.setMessage("Do you want to delete this problem ?")
-        builder.setPositiveButton("Yes"){dialog, which ->
+        builder.setTitle("Supprimer le problème")
+        builder.setMessage("Voulez-vous supprimer ce problème?")
+        builder.setPositiveButton("Oui"){dialog, which ->
             Toast.makeText(context,"Problem Deleted", Toast.LENGTH_SHORT).show()
             this.cusomDataBaseService.deletById(uid)
             (context as Activity).finish()
             context.startActivity(context.getIntent())
 
         }
-        builder.setNegativeButton("No"){dialog, which ->
+        builder.setNegativeButton("Non"){dialog, which ->
             Toast.makeText(context,"Problem not deleted", Toast.LENGTH_SHORT).show()
         }
         val dialog: AlertDialog = builder.create()

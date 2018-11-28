@@ -1,19 +1,15 @@
 package com.example.samlille.gestiondepark;
 
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.samlille.gestiondepark.DataBase.Problem_Entity;
 import com.example.samlille.gestiondepark.Services.CusomDataBaseService;
-import com.example.samlille.gestiondepark.Services.MapService;
 
 public class problemAfficher extends AppCompatActivity {
     private TextView type, description, location, adresse;
@@ -38,15 +34,19 @@ public class problemAfficher extends AppCompatActivity {
 
     private void fetchProblem() {
         this.cusomDataBaseService.initDB(this);
-        this.cusomDataBaseService.getElementById(this,
-                getIntent().getLongExtra("id",0),
-                (problem_entity) -> {
-                    type.setText(problem_entity.getType());
-                    description.setText(problem_entity.getDescription());
-                    location.setText(problem_entity.getLocation());
-                    adresse.setText(problem_entity.getAdresse());
-                    return null;
-                });
+        Handler handler = new Handler();
+        handler.postDelayed(()->{
+                this.cusomDataBaseService.getElementById(this,
+                        getIntent().getLongExtra("id",0),
+                        (problem_entity) -> {
+                            type.setText(problem_entity.getType());
+                            description.setText(problem_entity.getDescription());
+                            location.setText(problem_entity.getLocation());
+                            adresse.setText(problem_entity.getAdresse());
+                            return null;
+                        });
+        }, 1500);
+
     }
 
     public void initInput(){
@@ -72,7 +72,7 @@ public class problemAfficher extends AppCompatActivity {
         adb.setIcon(android.R.drawable.ic_dialog_alert);
 
         //On affecte un bouton "OK" à notre AlertDialog et on lui affecte un évènement
-        adb.setPositiveButton("OK", (dialog, which) -> {
+        adb.setPositiveButton("Oui", (dialog, which) -> {
             cusomDataBaseService.deletById(getIntent().getLongExtra("id",0));
             cusomDataBaseService.destroyDataBase();
             startActivity(new Intent(problemAfficher.this, MainActivity.class));
